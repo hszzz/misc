@@ -8,9 +8,9 @@ CFLAGS := -lpthread
 
 DIR_DEPS := deps
 DIR_OBJS := objs
-DIR_EXES := exes
+DIR_EXES := .
 
-DIRS := $(DIR_DEPS) $(DIR_OBJS) $(DIR_EXES)
+DIRS := $(DIR_DEPS) $(DIR_OBJS) # $(DIR_EXES)
 
 EXE := target
 EXE := $(addprefix $(DIR_EXES)/,$(EXE))

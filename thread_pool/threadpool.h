@@ -10,6 +10,8 @@ typedef struct task {
 
 typedef struct threadpool {
 	task* tasks;
+
+	// queue number
 	int queue_capacity;
 	int queue_size;
 	int queue_front;
@@ -20,14 +22,16 @@ typedef struct threadpool {
 
 	int min_task;
 	int max_task;
+
+	// thread number
 	int busy_num;
 	int alive_num;
 	int exit_num;
 
 	pthread_mutex_t pool_mutex;
 	pthread_mutex_t busy_mutex;
-	pthread_cond_t queue_full;
-	pthread_cond_t queue_empty;
+	pthread_cond_t queue_not_full;
+	pthread_cond_t queue_not_empty;
 
 	int destruct; // 0 -> normal; 1 -> will be destructed
 } threadpool;
@@ -35,7 +39,7 @@ typedef struct threadpool {
 threadpool* threadpool_create(int min, int max, int queue_size);
 int threadpool_destroy(threadpool* pool);
 
-int threadpool_add(threadpool* pool, void(*callback)(void*), void* arg);
+void threadpool_add(threadpool* pool, void(*callback)(void*), void* arg);
 
 int threadpool_busy(threadpool* pool);
 int threadpool_alive(threadpool* pool);
