@@ -50,6 +50,7 @@ $(DIRS) :
 
 clean :
 	$(RM) $(DIRS)
+	$(RM) $(EXE)
 
 rebuild :
 	$(MAKE) clean
