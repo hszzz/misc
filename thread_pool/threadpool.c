@@ -220,8 +220,6 @@ void* worker(void* arg) {
 		pthread_mutex_lock(&pool->busy_mutex);
 		pool->busy_num--;
 		pthread_mutex_unlock(&pool->busy_mutex);
-
-		pthread_mutex_unlock(&pool->pool_mutex);
 	}
 
 	return NULL;
