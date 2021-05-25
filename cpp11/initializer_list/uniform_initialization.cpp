@@ -12,6 +12,13 @@ private:
 	int a;
 };
 
+// using uniform initialization must be aggregate: 
+// 1. no user-defined constructor
+// 2. no private or protected and static member
+// 3. no base class
+// 4. no virtual function
+// 5. no { } and = initialize member in class (c++11 ×, since c++14 √)
+
 int main() {
 	int a = 1;
 	int a1 = { 1 };
