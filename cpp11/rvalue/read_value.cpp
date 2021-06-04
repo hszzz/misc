@@ -38,6 +38,9 @@ int main() {
 
 	int&& c = 6;
 
+	// int&& d = c; // error
+	// int&& d = std::move(c); // ok
+
 	cout << a << " " << b << " " << c << endl;
 
 	Test t = get_test();
