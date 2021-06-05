@@ -56,14 +56,25 @@ void test_init() {
 	cout << "s8: " << s8.use_count() << endl; // 1
 }
 
+// shared_ptr can't work well when it is managing an object array
 void test_user_defined_delete() { 
-	// shared_ptr can't work well when it is managering a object array
-	
+	cout << __FUNCTION__ << endl;
+	// shared_ptr<Test> s(new Test[5]);	// error
+	shared_ptr<Test> s(new Test[5], [](Test* t) { delete[] t; });
+	shared_ptr<Test> s1(new Test[5], default_delete<Test[]>());
+}
+
+template <typename T>
+shared_ptr<T> make_shared_array_ptr(size_t t) {
+	return shared_ptr<T>(new T[t], [](T* t) { delete[] t; });
 }
 
 int main() {
 	test_init();
 	test_user_defined_delete();
+
+	auto arr = make_shared_array_ptr<Test>(5);
+
 	return 0;
 }
 
