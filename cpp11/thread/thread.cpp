@@ -20,9 +20,9 @@ void func2() {
 }
 
 int main() {
-	// std::thread t(func1, 10);
+	std::thread t(func1, 10);
 	std::thread t1(func2);
-	// t.join();
+	t.join();
 	t1.join();
 	return 0;
 }
