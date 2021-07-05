@@ -3,6 +3,8 @@
 #include <queue>
 #include <condition_variable>
 #include <functional>
+#include <unistd.h>
+#include <stdlib.h>
 
 template <typename T>
 class SyncQueue {
@@ -27,6 +29,7 @@ public:
 		T tmp = queue_.front();
 		queue_.pop();
 		std::cout << "pop : " << tmp << std::endl;
+		cond_not_full_.notify_all();
 		return tmp;
 	}
 
@@ -52,16 +55,29 @@ private:
 	int max_;
 };
 
-int main() {
-	SyncQueue<int> queue(3);
-	auto producer = std::bind(&SyncQueue<int>::push, &queue, std::placeholders::_1);
-	auto consumer = std::bind(&SyncQueue<int>::pop, &queue);
+SyncQueue<int> queue(3);
 
+void producer() {
+	for (;;) {
+		int i = rand() % 999;
+		queue.push(i);
+		usleep(rand() % 199);
+	}
+}
+
+void consumer() {
+	for (;;) {
+		int tmp = queue.pop();
+		usleep(rand() % 199);
+	}
+}
+
+int main() {
 	std::thread t1[5];
 	std::thread t2[5];
 	
 	for (int i=0; i<5; i++) {
-		t1[i] = std::thread(producer, i);
+		t1[i] = std::thread(producer);
 		t2[i] = std::thread(consumer);
 	}
 
