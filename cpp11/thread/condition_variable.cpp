@@ -17,7 +17,8 @@ public:
 			cond_not_full_.wait(lock);
 		}
 		queue_.push(val);
-		std::cout << "push : " << val << std::endl;
+		std::cout << "thread id " << std::this_thread::get_id()
+		   	<< " push : " << val << std::endl;
 		cond_not_empty_.notify_all();
 	}	
 
@@ -28,7 +29,8 @@ public:
 		}
 		T tmp = queue_.front();
 		queue_.pop();
-		std::cout << "pop : " << tmp << std::endl;
+		std::cout << "thread id : " << std::this_thread::get_id() 
+			<< " pop : " << tmp << std::endl;
 		cond_not_full_.notify_all();
 		return tmp;
 	}
@@ -55,7 +57,7 @@ private:
 	int max_;
 };
 
-SyncQueue<int> queue(3);
+SyncQueue<int> queue(100);
 
 void producer() {
 	for (;;) {
