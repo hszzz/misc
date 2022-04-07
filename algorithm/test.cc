@@ -35,9 +35,9 @@ void benchmark(const Func& func) {
 int main() {
   std::vector<int> array = generate_random_vector(0, 100, 20);
   debug(array);
-  sort::section_sort(array.begin(), array.end());
+  sort::merge_sort(array.begin(), array.end());
   debug(array);
-  sort::section_sort(array.begin(), array.end(), std::greater<>());
+  sort::merge_sort(array.begin(), array.end(), std::greater<>());
   // benchmark([&array]() { sort::insertion_sort(array.begin(), array.end());
   // });
   debug(array);
