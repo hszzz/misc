@@ -59,7 +59,7 @@ static void insertion_sort(Iter begin, Iter end, Compare cmp = Compare{}) {
 template <typename Iter,
           typename T = typename std::iterator_traits<Iter>::value_type,
           typename Compare = std::less<T>>
-static void section_sort(Iter begin, Iter end, Compare cmp = Compare{}) {
+static void selection_sort(Iter begin, Iter end, Compare cmp = Compare{}) {
   if (std::distance(begin, end) <= 1) return;
 
   for (Iter it = begin; it != std::next(end, -1); ++it) {
