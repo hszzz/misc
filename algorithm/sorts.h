@@ -1,5 +1,5 @@
 #include <functional>
-#include <iterator>
+#include <iostream>
 
 namespace sort {
 
@@ -192,5 +192,63 @@ static void heap_sort(Containter& containter, Compare cmp = Compare{}) {
     detail::make_heap(containter, i, 0, cmp);
   }
 }
+
+template <size_t Size, typename Iter,
+          typename Compare =
+              std::less<typename std::iterator_traits<Iter>::value_type>>
+static void bucket_sort(Iter begin, Iter end, Compare cmp = Compare{}) {
+  auto [min, max] = std::minmax_element(begin, end);
+  if (min == max) return;
+
+  const size_t bucket_num = (*max - *min) / Size + 1;
+  std::vector<std::vector<typename std::iterator_traits<Iter>::value_type>>
+      buckets(bucket_num);
+  for (auto& bucket : buckets) {
+    bucket.reserve(2 * Size);
+  }
+
+  for (Iter it = begin; it != end; ++it) {
+    size_t index = (*it - *min) / Size;
+    buckets[index].emplace_back(*it);
+  }
+
+  Iter dest = begin;
+  for (auto& bucket : buckets) {
+    quick_sort(bucket.begin(), bucket.end(), cmp);
+    std::copy(bucket.rbegin(), bucket.rend(), dest);
+    std::advance(dest, bucket.size());
+  }
+}
+
+template <typename Iter>
+static void counting_sort(Iter begin, Iter end) {
+  auto len = std::distance(begin, end);
+  if (len <= 1) return;
+
+  auto [min, max] = std::minmax_element(begin, end);
+  if (*min < 0 || *min == *max) return;
+  std::vector<size_t> counter(*max + 1, 0);
+
+  for (Iter it = begin; it != end; ++it) {
+    ++counter[*it];
+  }
+
+  /*
+  for (int i = 1; i < counter.size(); ++i) {
+    counter[i] += counter[i - 1];
+  }
+  */
+
+  auto dest = begin;
+  for (size_t i = 0; i < counter.size(); ++i) {
+    if (counter[i] != 0) {
+      int cnt = counter[i];
+      while (cnt--) *(dest++) = i;
+    }
+  }
+}
+
+template <typename Iter>
+void radix_sort(Iter begin, Iter end) {}
 
 }  // namespace sort
