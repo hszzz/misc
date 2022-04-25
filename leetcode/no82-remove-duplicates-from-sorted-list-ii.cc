@@ -32,9 +32,28 @@ ListNode* deleteDuplicate(ListNode* head) {
   return dummy.next;
 }
 
+ListNode* deleteDuplicate1(ListNode* head) {
+  if (head == nullptr || head->next == nullptr) return head;
+
+  if (head->val != head->next->val) {
+    deleteDuplicate1(head->next);
+  } else {
+    ListNode* skip = head->next;
+    while (skip && head->val == skip->val) {
+      skip = skip->next;
+    }
+    return deleteDuplicate1(skip);
+  }
+
+  return head;
+}
+
 int main() {
   ListNode* list = build_list({1, 1, 1, 2, 3});
   std::cout << list;
   list = deleteDuplicate(list);
   std::cout << list;
+  ListNode* list1 = build_list({1, 1, 1, 2, 3});
+  list1 = deleteDuplicate1(list1);
+  std::cout << list1;
 }
