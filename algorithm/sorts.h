@@ -10,15 +10,15 @@ template <typename Iter,
           typename Compare = std::less<T>>
 static Iter partition(Iter begin, Iter end, Compare cmp = Compare{}) {
   const auto pv = *begin;
-  Iter piovt = begin;
+  Iter pivot = begin;
   for (auto it = std::next(begin, 1); it != end; ++it) {
     if (cmp(*it, pv)) {
-      piovt = std::next(piovt, 1);
-      std::iter_swap(it, piovt);
+      pivot = std::next(pivot, 1);
+      std::iter_swap(it, pivot);
     }
   }
-  std::iter_swap(begin, piovt);
-  return piovt;
+  std::iter_swap(begin, pivot);
+  return pivot;
 }
 
 template <typename Containter, typename T = typename Containter::value_type,
@@ -173,9 +173,9 @@ template <typename Iter,
 static void quick_sort(Iter begin, Iter end, Compare cmp = Compare{}) {
   if (std::distance(begin, end) <= 1) return;
 
-  Iter piovt = detail::partition(begin, end, cmp);
-  quick_sort(begin, piovt, cmp);
-  quick_sort(piovt + 1, end, cmp);
+  Iter pivot = detail::partition(begin, end, cmp);
+  quick_sort(begin, pivot, cmp);
+  quick_sort(pivot + 1, end, cmp);
 }
 
 template <typename Containter, typename T = typename Containter::value_type,
