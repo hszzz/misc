@@ -21,13 +21,21 @@ ListNode* swapPairs(ListNode* head) {
   return dummy.next;
 }
 
+ListNode* swapPairs1(ListNode* head) {
+  if (!head || !head->next) return head;
+  ListNode* node = head->next;
+  head->next = swapPairs1(node->next);
+  node->next = head;
+  return node;
+}
+
 int main() {
   auto list = build_list({1, 2, 3, 4});
   std::cout << list;
   auto list1 = swapPairs(list);
   std::cout << list1;
 
-  auto list2 = generate_random(1, 10, 9);
+  auto list2 = build_list({1, 2, 3, 4});
   std::cout << list2;
   auto list3 = swapPairs(list2);
   std::cout << list3;
